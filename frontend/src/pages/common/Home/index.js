@@ -9,6 +9,9 @@ import { HideLoading, ShowLoading } from '../../../redux/loaderSlice'
 
 function HomePage() {
   const [exams, setExams] = useState([])
+  const [filterExams, setFilterExams] = useState([])
+  const [searchTerm, setSearchTerm] = useState("");
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const user = useSelector(state=>state.users.user)
@@ -20,6 +23,7 @@ function HomePage() {
        if(response.success){
         message.success(response.message)
         setExams(response.data)
+        setFilterExams(response.data)
        }
        else{
         message.error(response.message)
@@ -30,6 +34,16 @@ function HomePage() {
        message.error(error.message)      
     }
   }
+  const handleChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  useEffect(() => {
+    const filteredExam = exams.filter((exam) =>
+      exam.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilterExams(filteredExam);
+  }, [searchTerm, exams]);
   useEffect(()=>{
     getExams()
   },[])
@@ -37,8 +51,16 @@ function HomePage() {
     user && <div>
       <PageTitle title={`Hi ${user.name}, Welcome to Quiz Portal`}/>
       <div className='divider'></div>
+      <div className="searchexam" style={{margin:"10px auto", maxWidth:"400px"}}>
+      <input
+              type="text"
+              placeholder="Search exam..."
+              value={searchTerm}
+              onChange={(e) => handleChange(e)}
+            />
+      </div>
       <Row gutter={[16,16]} className="mt-2">
-        {exams&&exams.map((exam,index)=>{
+        {filterExams&&filterExams.map((exam,index)=>{
            return (
             <Col span={6} key={index}>
               <div className='card-lg flex flex-col gap-1 p-2'>

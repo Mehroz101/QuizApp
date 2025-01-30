@@ -74,7 +74,7 @@ function AddEditQuestion(props) {
         <input type="text"/>
        </Form.Item>
        <Form.Item name="correctOption" label="Correct Option">
-        <input type="text"/>
+        <input type="text" placeholder='example: A'/>
        </Form.Item>
        <div className='flex gap-2'>
        <Form.Item name="A" label="Option A">

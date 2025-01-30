@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from 'react'
-import { useNavigate } from 'react-router-dom'
-import PageTitle from '../../../components/PageTitle'
-import {Table,message} from 'antd'
-import { useDispatch } from 'react-redux'
-import { HideLoading, ShowLoading } from '../../../redux/loaderSlice'
-import { getAllExams, deleteExam } from '../../../apicalls/exams'
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import PageTitle from "../../../components/PageTitle";
+import { Table, message } from "antd";
+import { useDispatch } from "react-redux";
+import { HideLoading, ShowLoading } from "../../../redux/loaderSlice";
+import { getAllExams, deleteExam } from "../../../apicalls/exams";
 
 function ExamsPage() {
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const [exams,setExams] = useState([])
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [exams, setExams] = useState([]);
   const columns = [
     {
       title: "Exam Name",
@@ -17,84 +17,94 @@ function ExamsPage() {
     },
     {
       title: "Duration",
-      dataIndex: "duration"
+      dataIndex: "duration",
     },
     {
       title: "Category",
-      dataIndex: "category"
+      dataIndex: "category",
     },
     {
       title: "Total Marks",
-      dataIndex: "totalMarks"
+      dataIndex: "totalMarks",
     },
     {
       title: "Passing Marks",
-      dataIndex: "passingMarks"
+      dataIndex: "passingMarks",
     },
     {
       title: "Action",
       dataIndex: "action",
-      render: (text,record) => {
-        return <div className='flex gap-2'>
-          <i className='ri-pencil-line cursor-pointer'
-          onClick={()=>navigate(`/admin/exams/edit/${record._id}`)}></i>
-          <i className='ri-delete-bin-line cursor-pointer' onClick={()=>{deleteExamById(record._id)}}></i>
-        </div>
+      render: (text, record) => {
+        return (
+          <div className="flex gap-2">
+            <i
+              className="ri-pencil-line cursor-pointer"
+              onClick={() => navigate(`/admin/exams/edit/${record._id}`)}
+              style={{ border: "1px solid", width: "25px", height: "25px", lineHeight:"25px", margin:"0 auto" }}
+            ></i>
+            <i
+              className="ri-delete-bin-line cursor-pointer"
+              onClick={() => {
+                deleteExamById(record._id);
+              }}
+              style={{ border: "1px solid", width: "25px", height: "25px", lineHeight:"25px", margin:"0 auto" }}
+            ></i>
+          </div>
+        );
+      },
+    },
+  ];
+  const getExamsData = async () => {
+    try {
+      dispatch(ShowLoading());
+      const response = await getAllExams();
+      dispatch(HideLoading());
+      if (response.success) {
+        message.success(response.message);
+        setExams(response.data);
+      } else {
+        message.error(response.message);
       }
+    } catch (error) {
+      dispatch(HideLoading());
+      message.error(error.message);
     }
-  ]
-  const getExamsData = async() => {
-    try{
-      dispatch(ShowLoading())
-      const response = await getAllExams()
-      dispatch(HideLoading())
-      if(response.success){
-       message.success(response.message)
-       setExams(response.data)
-      }
-      else{
-       message.error(response.message)
-      }
-    }
-    catch(error){
-         dispatch(HideLoading())
-         message.error(error.message)
-    }
-  }
-  const deleteExamById = async(id) => {
-    try{
+  };
+  const deleteExamById = async (id) => {
+    try {
       dispatch(ShowLoading());
       const response = await deleteExam(id);
-      dispatch(HideLoading())
-      if(response.success){
+      dispatch(HideLoading());
+      if (response.success) {
         message.success(response.message);
-        getExamsData()
+        getExamsData();
+      } else {
+        message.error(response.message);
       }
-      else{
-        message.error(response.message)
-      }
+    } catch (error) {
+      dispatch(HideLoading());
+      message.error(error.message);
     }
-    catch(error){
-      dispatch(HideLoading())
-      message.error(error.message)
-    }
-  }
-  useEffect(()=>{
-     getExamsData()
-  },[])
+  };
+  useEffect(() => {
+    getExamsData();
+  }, []);
   return (
     <>
-    <div className='flex justify-between mt-1'>
-       <PageTitle title="Exams"/>
-       <button className='primary-outlined-btn flex items-center cursor-pointer' onClick={()=>navigate('/admin/exams/add')}>
-        <i className='ri-add-line'></i>
-        Add Exam
-       </button>
-    </div>
-    <div className='divider mt-1'></div>
-    <Table columns={columns} dataSource={exams}/>
+      <div className="flex justify-between mt-1">
+        <PageTitle title="Exams" />
+        <button
+          className="primary-outlined-btn flex items-center cursor-pointer"
+          onClick={() => navigate("/admin/exams/add")}
+        >
+          <i className="ri-add-line"></i>
+          Add Exam
+        </button>
+      </div>
+      <div className="divider mt-1"></div>
+      <Table columns={columns} dataSource={exams} />
     </>
-  )
+  );
 }
 
-export default ExamsPage
+export default ExamsPage;
