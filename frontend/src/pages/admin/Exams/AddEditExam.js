@@ -141,10 +141,14 @@ function AddEditExam() {
                 <Col span={8}>
                    <Form.Item label="Category" name="category">
                     <select>
-                    <option value="JavaScript">JavaScript</option>
-                    <option value="Nodejs">Nodejs</option>
-                    <option value="React">React</option>
-                    <option value="MongoDb">MongoDb</option>
+                    <option value="Development">Development</option>
+                    <option value="Math">Math</option>
+                    <option value="Science">Science</option>
+                    <option value="Database">Database</option>
+                    <option value="Intelligence">Intelligence</option>
+                    <option value="Personal">Personal</option>
+                    <option value="Random">Random</option>
+                    <option value="Other">Other</option>
                     </select>
                    </Form.Item>
                 </Col>
