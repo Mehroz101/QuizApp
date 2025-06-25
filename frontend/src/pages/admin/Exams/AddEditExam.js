@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react';
 import PageTitle from '../../../components/PageTitle';
 import { Form, Row, Col, message, Tabs, Table } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
-import { addExam, deleteQuestionFromExam, editExam, getExamById } from '../../../apicalls/exams';
+import { addExam, deleteQuestionFromExam, editExam, getExamByAdmin, getExamById } from '../../../apicalls/exams';
 import { useDispatch } from 'react-redux';
 import { HideLoading, ShowLoading } from '../../../redux/loaderSlice';
 import AddEditQuestion from './AddEditQuestion';
@@ -41,7 +41,7 @@ function AddEditExam() {
   const getExamDataById = async(id) => {
       try{
          dispatch(ShowLoading())
-         const response = await getExamById(id)
+         const response = await getExamByAdmin(id)
          dispatch(HideLoading())
          if(response.success){
             message.success(response.message)

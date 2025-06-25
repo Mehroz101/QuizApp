@@ -66,7 +66,7 @@ const getAllExams = async (req, res) => {
   }
 };
 
-const getExamById = async (req, res) => {
+const getExamByAdmin = async (req, res) => {
   try {
     const exam = await Exam.findById(req.params.id).populate("questions");
     if (exam) {
@@ -90,6 +90,46 @@ const getExamById = async (req, res) => {
     });
   }
 };
+const getExamById = async (req, res) => {
+  try {
+    const exam = await Exam.findById(req.params.id).populate("questions");
+
+    if (!exam) {
+      return res.status(404).json({
+        message: "Exam not found.",
+        success: false,
+      });
+    }
+
+    // Shuffle the questions
+    const shuffledQuestions = exam.questions.sort(() => 0.5 - Math.random());
+
+    // Get half (randomized) of the questions
+    const halfQuestions = shuffledQuestions.slice(
+      0,
+      Math.ceil(shuffledQuestions.length / 2)
+    );
+
+    // Prepare exam data with random half questions
+    const examData = {
+      ...exam.toObject(), // convert to plain JS object
+      questions: halfQuestions,
+    };
+
+    res.send({
+      message: "Exam data fetched successfully with random questions.",
+      data: examData,
+      success: true,
+    });
+  } catch (error) {
+    res.status(500).send({
+      message: error.message,
+      data: error,
+      success: false,
+    });
+  }
+};
+
 
 // edit exam by id
 const editExam = async (req, res) => {
@@ -268,4 +308,5 @@ module.exports = {
   addQuestionToExam,
   editQuestionInExam,
   deleteQuestionFromExam,
+  getExamByAdmin
 };

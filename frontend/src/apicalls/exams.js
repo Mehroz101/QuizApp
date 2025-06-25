@@ -29,6 +29,15 @@ export const getExamById = async(id) => {
         return error.response.data
     }
 }
+export const getExamByAdmin = async(id) => {
+    try{
+       const response = await axiosInstance.get(`/api/exams/getexambyadmin/${id}`)
+       return response.data
+    }
+    catch(error){
+        return error.response.data
+    }
+}
 
 export const editExam = async(payload,id) => {
     try{
