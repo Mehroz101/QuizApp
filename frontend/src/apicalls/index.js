@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://quiz-app-topaz-nine-94.vercel.app",
   headers: {
     authorization: `Bearer ${localStorage.getItem("token")}`,
   },
